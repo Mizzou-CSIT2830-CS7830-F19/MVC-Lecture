@@ -1,11 +1,12 @@
 <div>
   <form>
-      <select name="selection"> 
-        <option></option>
+      <select [(ngModel)]="selection" (change)="selected()" name="selection"> 
+        <option *ngFor="let view of views" [ngValue]="view">{{view}}</option>
       </select>
 
       <br>
-      <input type="text"  name="formPlanetName"> 
+      <input type="text" [(ngModel)]="formPlanetName" name="formPlanetName">
+        {{formPlanetName}} 
 				
 				<br>
         <input type="text" name="formPlanetColor" >
@@ -18,22 +19,23 @@
 	
 				<br>
 
-      <button>Add Pluto</button>
+      <button (click)="addMyPlanet()">Add Pluto</button>
   </form>
-  <div>
-      <h2></h2>
+  <div [ngSwitch]="selection">
+      <h2>Total Planets: {{getTotalPlanets()}}</h2>
 
       <!-- List View -->
-      <div>
-        <ul>
-          <li>
-            
+      <div *ngSwitchCase="'list'">
+        <ul> 
+          <li *ngFor="let p of data" >
+            {{p.name}} has a radius of {{p.radius}}km 
+            and {{p.satellites}} satellites
           </li>
         </ul>
     </div>
 
     <!-- Table View -->
-      <div>
+      <div *ngSwitchCase="'table'"> 
           <table class="table">
               <tr>
                   <th>Name</th>
@@ -41,20 +43,24 @@
                   <th>Radius</th>
                   <th>Satellites</th>
               </tr>
-              <tr>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
+              <tr *ngFor="let p of data">
+                  <td>{{p.name}}</td>
+                  <td>{{p.color}}</td>
+                  <td>{{p.radius}}</td>
+                  <td>{{p.satellites}}</td>
               </tr>
           </table>
       </div>
 
       <!-- System View -->
-      <div>
-          <div class="planet">
-              <div></div>
-              <span></span>
+      <div *ngSwitchCase="'system'">
+          <div class="planet" *ngFor="let p of data">
+              <div [ngStyle]="{
+                'width': p.radius / 69911 * 300 + 'px',
+                'height': p.radius / 69911 * 300 + 'px',
+                'background-color': p.color
+              }"></div>
+              <span>{{p.name}}</span>
           </div>
       </div>
 

@@ -16,11 +16,13 @@
             window.onload = function() {
                 window.app = new Controller(new Model(planets), new View());
                 app.setView();
-               	
+               	app.addData({name:"Pluto",color:"gray",radius:1186,satellites:5});
             };
             
-            
-            
+            function Controller(model, view){
+                this.model = model; 
+                this.view = view; 
+            }
             
             Controller.prototype.setView = function(viewType) {
                 this.view.render(this.model, viewType);
@@ -39,15 +41,17 @@
             	console.dir(Model.prototype); 
             }
             
-            
-            
+            function Model(data){
+                this.data = data; 
+            }
             
             Model.prototype.addData = function(data) {
                 this.data.push(data);  
             };
             
-            
-            
+            function View(){
+                this.renderMode = "system";
+            }
             
             View.prototype.render = function(model, renderMode) {
                 this.renderMode = renderMode || this.renderMode;
